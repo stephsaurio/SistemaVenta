@@ -1,0 +1,4 @@
+codigo_descuento|descuento|tipo_descuento|fecha_vencimiento
+a1|10|porcentaje|01/01/2026
+b2|50|monto fijo|02/02/2026
+c3|10|porcentaje|03/01/2026
