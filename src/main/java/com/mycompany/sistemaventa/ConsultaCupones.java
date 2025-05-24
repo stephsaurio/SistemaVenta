@@ -4,7 +4,6 @@
  */
 package com.mycompany.sistemaventa;
 
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -17,97 +16,117 @@ import javax.swing.table.TableModel;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+
 /**
  *
  * @author stephany
  */
 public class ConsultaCupones extends javax.swing.JFrame {
-    
-private Cupones cupon;
+
+    private Cupones cupon;
 
     /**
      * Creates new form ConsultaCupones
      */
-
     public ConsultaCupones() throws IOException {
-      initComponents();
+        initComponents();
         cargarCuponesDesdeArchivo();
         pintarTabla();
-      
+
         jComboBox1.addItem("Porcentaje");
         jComboBox1.addItem("Monto Fijo");
-    
 
-        
-            DefaultTableModel t = new DefaultTableModel(new String[]{"Codigo","Valor", "Tipo", "FechaVencimiento"},SistemaVenta.cupones.size());
-          jTable1.setModel(t);
-          TableModel tabla = jTable1.getModel();
-          
-          for (int i=0; i<SistemaVenta.cupones.size();i++){
-              Cupones u = SistemaVenta.cupones.get(i);
-              tabla.setValueAt(u.codigo, i, 0);
-              tabla.setValueAt(u.valor, i, 1);
-              tabla.setValueAt(u.tipoDescuento, i, 2);
-              tabla.setValueAt(u.fechaVencimiento, i, 3);
-          }
- 
-    
-    
-    
+        DefaultTableModel t = new DefaultTableModel(new String[]{"Codigo", "Valor", "Tipo", "FechaVencimiento"}, SistemaVenta.cupones.size());
+        jTable1.setModel(t);
+        TableModel tabla = jTable1.getModel();
+
+        for (int i = 0; i < SistemaVenta.cupones.size(); i++) {
+            Cupones u = SistemaVenta.cupones.get(i);
+            tabla.setValueAt(u.codigo, i, 0);
+            tabla.setValueAt(u.valor, i, 1);
+            tabla.setValueAt(u.tipoDescuento, i, 2);
+            tabla.setValueAt(u.fechaVencimiento, i, 3);
+        }
+
     }
-private void cargarCuponesDesdeArchivo() {
+
+ private void cargarCuponesDesdeArchivo() {
     java.io.File archivo = new java.io.File("cupones.txt");
 
     if (!archivo.exists()) {
-        // Crear archivo si no existe
+        System.out.println("Archivo cupones.txt no existe");
+        return;
     }
 
     SistemaVenta.cupones.clear();
 
     try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
-        String linea = reader.readLine(); // Saltar encabezado
+        String encabezado = reader.readLine(); // Leer y saltar encabezado
+
+        DateTimeFormatter formato1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formato2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        String linea;
         while ((linea = reader.readLine()) != null) {
+            if (linea.trim().isEmpty()) continue;
+
             String[] partes = linea.split("\\|");
             if (partes.length == 4) {
-                String codigo = partes[0];
-                double valor = Double.parseDouble(partes[1]);
-                String tipo = partes[2];
+                try {
+                    String codigo = partes[0];
+                    double valor = Double.parseDouble(partes[1]);
+                    String tipo = partes[2];
 
-                // Cambia el formato para que coincida con el formato dd/MM/yyyy
-                LocalDate fecha = LocalDate.parse(partes[3], DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                    LocalDate fecha = null;
 
-                Cupones c = new Cupones(codigo, valor, tipo, fecha);
-                SistemaVenta.cupones.add(c);
+                    // Intentar parsear con formato1
+                    try {
+                        fecha = LocalDate.parse(partes[3], formato1);
+                    } catch (DateTimeParseException e1) {
+                        // Si falla, intentar formato2
+                        fecha = LocalDate.parse(partes[3], formato2);
+                    }
+
+                    Cupones c = new Cupones(codigo, valor, tipo, fecha);
+                    SistemaVenta.cupones.add(c);
+                } catch (NumberFormatException | DateTimeParseException e) {
+                    System.out.println("Error parseando línea: " + linea + " - " + e.getMessage());
+                }
+            } else {
+                System.out.println("Formato incorrecto en línea: " + linea);
             }
         }
-    } catch (IOException | NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Error al cargar cupones: " + e.getMessage());
-    }
-}
-private void pintarTabla() {
-    DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
-    modelo.setRowCount(0); // Limpiar la tabla
-    for (Cupones u : SistemaVenta.cupones) {
-        modelo.addRow(new Object[]{
-            u.codigo,
-            u.valor,
-            u.tipoDescuento,
-            u.fechaVencimiento
-        });
-    }
-}
-private void guardarTodosLosCuponesEnArchivo() {
-    try (PrintWriter writer = new PrintWriter(new FileWriter("cupones.txt"))) {
-        writer.println("codigo_descuento|descuento|tipo_descuento|fecha_vencimiento");
-
-        for (Cupones c : SistemaVenta.cupones) {
-            writer.println(c.codigo + "|" + c.valor + "|" + c.tipoDescuento + "|" + c.fechaVencimiento);
-        }
-
     } catch (IOException e) {
-        JOptionPane.showMessageDialog(this, "Error al guardar cupones: " + e.getMessage());
-    }}
-  
+        JOptionPane.showMessageDialog(null, "Error al cargar cupones: " + e.getMessage());
+    }
+}
+
+    private void pintarTabla() {
+        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+        modelo.setRowCount(0); // Limpiar la tabla
+        for (Cupones u : SistemaVenta.cupones) {
+            modelo.addRow(new Object[]{
+                u.codigo,
+                u.valor,
+                u.tipoDescuento,
+                u.fechaVencimiento
+            });
+        }
+    }
+
+    private void guardarTodosLosCuponesEnArchivo() {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("cupones.txt"))) {
+            writer.println("codigo_descuento|descuento|tipo_descuento|fecha_vencimiento");
+
+            for (Cupones c : SistemaVenta.cupones) {
+                writer.println(c.codigo + "|" + c.valor + "|" + c.tipoDescuento + "|" + c.fechaVencimiento);
+            }
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error al guardar cupones: " + e.getMessage());
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -301,76 +320,76 @@ private void guardarTodosLosCuponesEnArchivo() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-this.dispose();
+        this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-int modificar = jTable1.getSelectedRow();
-if (modificar > -1) {
-    cupon = SistemaVenta.cupones.get(modificar);
-    textField5.setText(cupon.codigo); // Accediendo directamente
-    textField6.setText(String.valueOf(cupon.valor)); // Convertir a String
-    jComboBox1.setSelectedItem(cupon.tipoDescuento); // Ajustar el JComboBox
-    
-    // Manejo de la fecha
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    textField8.setText(cupon.fechaVencimiento.format(formatter)); // Convertir LocalDate a String
-} else {
-    JOptionPane.showMessageDialog(this, "Seleccione un elemento a modificar");
-}    // TODO add your handling code here:
+        int modificar = jTable1.getSelectedRow();
+        if (modificar > -1) {
+            cupon = SistemaVenta.cupones.get(modificar);
+            textField5.setText(cupon.codigo); // Accediendo directamente
+            textField6.setText(String.valueOf(cupon.valor)); // Convertir a String
+            jComboBox1.setSelectedItem(cupon.tipoDescuento); // Ajustar el JComboBox
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+textField8.setText(cupon.fechaVencimiento.format(formatter));
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione un elemento a modificar");
+        }    // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       int borrar = jTable1.getSelectedRow();
-            if (JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar el cupon?") == 0) {
-                SistemaVenta.cupones.remove(borrar);
-                pintarTabla();
-                JOptionPane.showMessageDialog(this, "Cupon eliminado");
-                guardarTodosLosCuponesEnArchivo();
-                 } else {
-        JOptionPane.showMessageDialog(this, "Seleccione un elemento a borrar");
-    
-            }
-         // TODO add your handling code here:
+        int borrar = jTable1.getSelectedRow();
+        if (JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar el cupon?") == 0) {
+            SistemaVenta.cupones.remove(borrar);
+            pintarTabla();
+            JOptionPane.showMessageDialog(this, "Cupon eliminado");
+            guardarTodosLosCuponesEnArchivo();
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione un elemento a borrar");
+
+        }
+        // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         if (cupon != null) {
-        cupon.codigo = textField5.getText();
-        
-        try {
-            double valor = Double.parseDouble(textField6.getText());
-            cupon.valor = valor; //valor como decimal
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "El valor debe ser un número decimal válido.");
-            return;
-        }
-        
-        // Asignar el tipo de descuento
-        cupon.tipoDescuento = (String) jComboBox1.getSelectedItem();
-        
-        // Manejar la fecha de vencimiento
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            cupon.fechaVencimiento = LocalDate.parse(textField8.getText(), formatter); // Convierte de String a LocalDate
-        } catch (DateTimeParseException e) {
-            JOptionPane.showMessageDialog(this, "Fecha inválida. Use el formato yyyy-MM-dd.");
-            return;
-        }
+            cupon.codigo = textField5.getText();
 
-        pintarTabla(); // Actualiza la tabla
-        JOptionPane.showMessageDialog(this, "Cupón modificado exitosamente.");
-                    guardarTodosLosCuponesEnArchivo();
+            try {
+                double valor = Double.parseDouble(textField6.getText());
+                cupon.valor = valor; //valor como decimal
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "El valor debe ser un número decimal válido.");
+                return;
+            }
 
-    } else {
-        JOptionPane.showMessageDialog(this, "Ningún cupón seleccionado.");
-    }
+            // Asignar el tipo de descuento
+            cupon.tipoDescuento = (String) jComboBox1.getSelectedItem();
+
+            // Manejar la fecha de vencimiento
+            try {
+               DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+cupon.fechaVencimiento = LocalDate.parse(textField8.getText(), formatter);
+
+            } catch (DateTimeParseException e) {
+                JOptionPane.showMessageDialog(this, "Fecha inválida. Use el formato yyyy-MM-dd.");
+                return;
+            }
+
+            pintarTabla(); // Actualiza la tabla
+            JOptionPane.showMessageDialog(this, "Cupón modificado exitosamente.");
+            guardarTodosLosCuponesEnArchivo();
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Ningún cupón seleccionado.");
+        }
 
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-cargarCuponesDesdeArchivo(); // Cargar cupones desde el archivo
-    pintarTabla();         // TODO add your handling code here:
+        cargarCuponesDesdeArchivo(); // Cargar cupones desde el archivo
+        pintarTabla();         // TODO add your handling code here:
     }//GEN-LAST:event_jButton6ActionPerformed
 
 

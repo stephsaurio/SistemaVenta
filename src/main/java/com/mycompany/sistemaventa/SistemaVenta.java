@@ -1,10 +1,22 @@
 package com.mycompany.sistemaventa;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 public class SistemaVenta {
 
@@ -80,4 +92,94 @@ public class SistemaVenta {
         Cupones cupon = new Cupones("DESC10", 10, "porcentaje", LocalDate.parse("31/12/2025", formatter));
         cupones.add(cupon);
     }
+    
+public static ArrayList<Usuario> leerUsuariosDesdeXML(String rutaArchivo) {
+    ArrayList<Usuario> usuarios = new ArrayList<>();
+    try {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document doc = builder.parse(new File(rutaArchivo));
+        doc.getDocumentElement().normalize();
+
+        NodeList lista = doc.getElementsByTagName("usuario");
+
+        for (int i = 0; i < lista.getLength(); i++) {
+            Node nodo = lista.item(i);
+            if (nodo.getNodeType() == Node.ELEMENT_NODE) {
+                Element elemento = (Element) nodo;
+
+                String nombre = getTextContentSafe(elemento, "nombre");
+                String usuario = getTextContentSafe(elemento, "nombreUsuario");
+                String password = getTextContentSafe(elemento, "password");
+                String rolStr = getTextContentSafe(elemento, "rol");
+
+                int rol = rolStr.isEmpty() ? 0 : Integer.parseInt(rolStr);
+
+                Usuario u = new Usuario();
+                u.nombre = nombre;
+                u.usuario = usuario;
+                u.password = password;
+                u.rol = rol;
+
+                usuarios.add(u);
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace(); // Para depuración
+    }
+    return usuarios;
+}
+
+private static String getTextContentSafe(Element elemento, String tagName) {
+    NodeList nodeList = elemento.getElementsByTagName(tagName);
+    if (nodeList.getLength() > 0) {
+        Node node = nodeList.item(0);
+        return node.getTextContent().trim();
+    }
+    return "";
+// Devuelve una cadena vacía si el nodo no existe
+}
+public static void exportarUsuariosA_XML(ArrayList<Usuario> usuarios, String rutaArchivo) {
+    try {
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+        Document doc = docBuilder.newDocument();
+
+        Element raiz = doc.createElement("usuarios");
+        doc.appendChild(raiz);
+
+        for (Usuario usuario : usuarios) {
+            Element usuarioElement = doc.createElement("usuario");
+
+            Element nombre = doc.createElement("nombre");
+            nombre.appendChild(doc.createTextNode(usuario.nombre));
+            usuarioElement.appendChild(nombre);
+
+            Element nombreUsuario = doc.createElement("nombreUsuario");
+            nombreUsuario.appendChild(doc.createTextNode(usuario.usuario));
+            usuarioElement.appendChild(nombreUsuario);
+
+            Element password = doc.createElement("password");
+            password.appendChild(doc.createTextNode(usuario.password));
+            usuarioElement.appendChild(password);
+
+            Element rol = doc.createElement("rol");
+            rol.appendChild(doc.createTextNode(String.valueOf(usuario.rol)));
+            usuarioElement.appendChild(rol);
+
+            raiz.appendChild(usuarioElement);
+        }
+
+        // Guardar el archivo XML
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        DOMSource source = new DOMSource(doc);
+        StreamResult result = new StreamResult(new File(rutaArchivo));
+        transformer.transform(source, result);
+
+    } catch (Exception e) {
+        e.printStackTrace(); // Para depuración
+    }
+}
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<usuarios>
+    <usuario>
+        <nombre>admin</nombre>
+        <nombreUsuario>admin</nombreUsuario>
+        <password>admin</password>
+        <rol>0</rol>
+    </usuario>
+    <usuario>
+        <nombre>admin</nombre>
+        <nombreUsuario>admin123</nombreUsuario>
+        <password>admin</password>
+        <rol>1</rol>
+    </usuario>
+    <usuario>
+        <nombre>admin</nombre>
+        <nombreUsuario>vendedor</nombreUsuario>
+        <password>123</password>
+        <rol>2</rol>
+    </usuario>
+<usuario>
+        <nombre>steph</nombre>
+        <nombreUsuario>sgomez</nombreUsuario>
+        <password>123</password>
+        <rol>1</rol>
+    </usuario>
+</usuarios>

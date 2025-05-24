@@ -13,6 +13,7 @@ com/mycompany/sistemaventa/SistemaVenta.class
 com/mycompany/sistemaventa/ConsultaCupones$5.class
 com/mycompany/sistemaventa/VentanaAdministradores.class
 com/mycompany/sistemaventa/Cupones.class
+com/mycompany/sistemaventa/ConsultaUsuarios$5.class
 com/mycompany/sistemaventa/NuevaVenta.class
 com/mycompany/sistemaventa/ConsultaLibros.class
 com/mycompany/sistemaventa/VentanaAdministrador$5.class
@@ -30,6 +31,7 @@ com/mycompany/sistemaventa/VentanaAdministrador$8.class
 com/mycompany/sistemaventa/VentanaVendedor$1.class
 com/mycompany/sistemaventa/ConsultaUsuarios$2.class
 com/mycompany/sistemaventa/Login$4.class
+com/mycompany/sistemaventa/ConsultaUsuarios$6.class
 com/mycompany/sistemaventa/Usuario.class
 com/mycompany/sistemaventa/ConsultaCupones$4.class
 com/mycompany/sistemaventa/NuevaVenta$8.class
@@ -69,6 +71,7 @@ com/mycompany/sistemaventa/NuevoCupon.class
 com/mycompany/sistemaventa/VentanaVendedor$3.class
 com/mycompany/sistemaventa/NuevoLibro.class
 com/mycompany/sistemaventa/ConsultaLibros$5.class
+com/mycompany/sistemaventa/ConsultaUsuarios$7.class
 com/mycompany/sistemaventa/VentanaAdministrador$9.class
 com/mycompany/sistemaventa/Login$3.class
 com/mycompany/sistemaventa/Libros.class
