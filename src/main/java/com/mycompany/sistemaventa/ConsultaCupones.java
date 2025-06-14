@@ -1,10 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.mycompany.sistemaventa;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -16,6 +13,7 @@ import javax.swing.table.TableModel;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import javax.swing.JFileChooser;
 
 /**
  *
@@ -50,56 +48,58 @@ public class ConsultaCupones extends javax.swing.JFrame {
 
     }
 
- private void cargarCuponesDesdeArchivo() {
-    java.io.File archivo = new java.io.File("cupones.txt");
+    private void cargarCuponesDesdeArchivo() {
+        java.io.File archivo = new java.io.File("cupones.txt");
 
-    if (!archivo.exists()) {
-        System.out.println("Archivo cupones.txt no existe");
-        return;
-    }
-
-    SistemaVenta.cupones.clear();
-
-    try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
-        String encabezado = reader.readLine(); // Leer y saltar encabezado
-
-        DateTimeFormatter formato1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        DateTimeFormatter formato2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        String linea;
-        while ((linea = reader.readLine()) != null) {
-            if (linea.trim().isEmpty()) continue;
-
-            String[] partes = linea.split("\\|");
-            if (partes.length == 4) {
-                try {
-                    String codigo = partes[0];
-                    double valor = Double.parseDouble(partes[1]);
-                    String tipo = partes[2];
-
-                    LocalDate fecha = null;
-
-                    // Intentar parsear con formato1
-                    try {
-                        fecha = LocalDate.parse(partes[3], formato1);
-                    } catch (DateTimeParseException e1) {
-                        // Si falla, intentar formato2
-                        fecha = LocalDate.parse(partes[3], formato2);
-                    }
-
-                    Cupones c = new Cupones(codigo, valor, tipo, fecha);
-                    SistemaVenta.cupones.add(c);
-                } catch (NumberFormatException | DateTimeParseException e) {
-                    System.out.println("Error parseando línea: " + linea + " - " + e.getMessage());
-                }
-            } else {
-                System.out.println("Formato incorrecto en línea: " + linea);
-            }
+        if (!archivo.exists()) {
+            System.out.println("Archivo cupones.txt no existe");
+            return;
         }
-    } catch (IOException e) {
-        JOptionPane.showMessageDialog(null, "Error al cargar cupones: " + e.getMessage());
+
+        SistemaVenta.cupones.clear();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
+            String encabezado = reader.readLine(); // Leer y saltar encabezado
+
+            DateTimeFormatter formato1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            DateTimeFormatter formato2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                if (linea.trim().isEmpty()) {
+                    continue;
+                }
+
+                String[] partes = linea.split("\\|");
+                if (partes.length == 4) {
+                    try {
+                        String codigo = partes[0];
+                        double valor = Double.parseDouble(partes[1]);
+                        String tipo = partes[2];
+
+                        LocalDate fecha = null;
+
+                        // Intentar parsear con formato1
+                        try {
+                            fecha = LocalDate.parse(partes[3], formato1);
+                        } catch (DateTimeParseException e1) {
+                            // Si falla, intentar formato2
+                            fecha = LocalDate.parse(partes[3], formato2);
+                        }
+
+                        Cupones c = new Cupones(codigo, valor, tipo, fecha);
+                        SistemaVenta.cupones.add(c);
+                    } catch (NumberFormatException | DateTimeParseException e) {
+                        System.out.println("Error parseando línea: " + linea + " - " + e.getMessage());
+                    }
+                } else {
+                    System.out.println("Formato incorrecto en línea: " + linea);
+                }
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error al cargar cupones: " + e.getMessage());
+        }
     }
-}
 
     private void pintarTabla() {
         DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
@@ -151,6 +151,8 @@ public class ConsultaCupones extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
+        exportarCSV = new javax.swing.JButton();
+        importarCSV = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -235,6 +237,26 @@ public class ConsultaCupones extends javax.swing.JFrame {
             }
         });
 
+        exportarCSV.setBackground(new java.awt.Color(237, 206, 225));
+        exportarCSV.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        exportarCSV.setForeground(new java.awt.Color(207, 114, 161));
+        exportarCSV.setText("Exportar csv");
+        exportarCSV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportarCSVActionPerformed(evt);
+            }
+        });
+
+        importarCSV.setBackground(new java.awt.Color(237, 206, 225));
+        importarCSV.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        importarCSV.setForeground(new java.awt.Color(207, 114, 161));
+        importarCSV.setText("Importar csv");
+        importarCSV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                importarCSVActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -262,7 +284,11 @@ public class ConsultaCupones extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(21, 21, 21)
-                                .addComponent(textField5, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(textField5, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(exportarCSV)
+                            .addComponent(importarCSV))))
                 .addContainerGap(14, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -291,29 +317,37 @@ public class ConsultaCupones extends javax.swing.JFrame {
                     .addComponent(jButton1)
                     .addComponent(jButton2)
                     .addComponent(jButton3))
-                .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel2)
-                    .addComponent(textField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2)
+                            .addComponent(textField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(textField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton4))
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(5, 5, 5)
-                                .addComponent(textField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(jButton6))
-                .addContainerGap(69, Short.MAX_VALUE))
+                                .addComponent(textField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(70, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                        .addComponent(jButton6)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton4)
+                        .addGap(18, 18, 18)
+                        .addComponent(exportarCSV)
+                        .addGap(18, 18, 18)
+                        .addComponent(importarCSV)
+                        .addGap(47, 47, 47))))
         );
 
         pack();
@@ -332,7 +366,7 @@ public class ConsultaCupones extends javax.swing.JFrame {
             jComboBox1.setSelectedItem(cupon.tipoDescuento); // Ajustar el JComboBox
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-textField8.setText(cupon.fechaVencimiento.format(formatter));
+            textField8.setText(cupon.fechaVencimiento.format(formatter));
         } else {
             JOptionPane.showMessageDialog(this, "Seleccione un elemento a modificar");
         }    // TODO add your handling code here:
@@ -369,8 +403,8 @@ textField8.setText(cupon.fechaVencimiento.format(formatter));
 
             // Manejar la fecha de vencimiento
             try {
-               DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-cupon.fechaVencimiento = LocalDate.parse(textField8.getText(), formatter);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                cupon.fechaVencimiento = LocalDate.parse(textField8.getText(), formatter);
 
             } catch (DateTimeParseException e) {
                 JOptionPane.showMessageDialog(this, "Fecha inválida. Use el formato yyyy-MM-dd.");
@@ -392,8 +426,65 @@ cupon.fechaVencimiento = LocalDate.parse(textField8.getText(), formatter);
         pintarTabla();         // TODO add your handling code here:
     }//GEN-LAST:event_jButton6ActionPerformed
 
+    private void exportarCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportarCSVActionPerformed
+        try (PrintWriter writer = new PrintWriter(new FileWriter("cupones.txt"))) {
+            writer.println("codigo_descuento|valor|tipo_descuento|fecha_vencimiento"); // Encabezados
+
+            for (Cupones c : SistemaVenta.cupones) {
+                writer.println(c.codigo + "|" + c.valor + "|" + c.tipoDescuento + "|" + c.fechaVencimiento);
+            }
+
+            JOptionPane.showMessageDialog(this, "Cupones exportados correctamente.");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error al exportar cupones: " + e.getMessage());
+        }
+
+    }//GEN-LAST:event_exportarCSVActionPerformed
+
+    private void importarCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importarCSVActionPerformed
+        File archivo = new File("cupones.txt");
+
+        if (!archivo.exists()) {
+            JOptionPane.showMessageDialog(this, "El archivo cupones.txt no existe.");
+            return;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
+            String encabezado = reader.readLine(); // Saltar encabezado 
+
+            SistemaVenta.cupones.clear(); // Limpiar la lista actual
+
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                if (linea.trim().isEmpty()) {
+                    continue;
+                }
+
+                String[] partes = linea.split("\\|");
+                if (partes.length == 4) {
+                    String codigo = partes[0].trim();
+                    double valor = Double.parseDouble(partes[1].trim());
+                    String tipo = partes[2].trim();
+                    LocalDate fecha = LocalDate.parse(partes[3].trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+                    Cupones cupon = new Cupones(codigo, valor, tipo, fecha);
+                    SistemaVenta.cupones.add(cupon);
+                } else {
+                    System.out.println("Formato incorrecto en línea: " + linea);
+                }
+            }
+
+            JOptionPane.showMessageDialog(this, "Cupones importados correctamente desde cupones.txt.");
+        } catch (IOException | NumberFormatException | DateTimeParseException e) {
+            JOptionPane.showMessageDialog(this, "Error al importar cupones: " + e.getMessage());
+        }
+
+    }//GEN-LAST:event_importarCSVActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton exportarCSV;
+    private javax.swing.JButton importarCSV;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;

@@ -1,27 +1,30 @@
 package com.mycompany.sistemaventa;
 
+import java.io.File;
+import java.util.ArrayList;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 public class ConsultaLibros extends javax.swing.JFrame {
-private Libros libro;
+
+    private Libros libro;
+
     public ConsultaLibros() {
         initComponents();
-        
-      DefaultTableModel t = new DefaultTableModel(
-            new String[]{"Título", "Autor", "Género", "Precio con IVA", "Precio sin IVA", "IVA", "Stock"},
-            SistemaVenta.libros.size()
+        DefaultTableModel t = new DefaultTableModel(
+                new String[]{"Título", "Autor", "Género", "Precio con IVA", "Precio sin IVA", "IVA", "Stock"},
+                SistemaVenta.libros.size()
         );
-        
+
         jTable1.setModel(t);
         TableModel tabla = jTable1.getModel();
-        
+
         for (int i = 0; i < SistemaVenta.libros.size(); i++) {
             Libros u = SistemaVenta.libros.get(i);
             double precioSinIVA = u.precioIVA / 1.12;
             double montoIVA = u.precioIVA - precioSinIVA;
-
             tabla.setValueAt(u.titulo, i, 0);
             tabla.setValueAt(u.autor, i, 1);
             tabla.setValueAt(u.genero, i, 2);
@@ -31,24 +34,25 @@ private Libros libro;
             tabla.setValueAt(u.stock, i, 6);
         }
     }
-private void pintarTabla() {
-  DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
-    modelo.setRowCount(0); // Limpiar la tabla
-    for (Libros u : SistemaVenta.libros) {
-        double precioSinIVA = u.precioIVA / 1.12; // Calcular precio sin IVA
-        double montoIVA = u.precioIVA - precioSinIVA; // Calcular monto de IVA
-        
-        modelo.addRow(new Object[]{
-            u.titulo,
-            u.autor,
-            u.genero,
-            String.format("%.2f", u.precioIVA), // Precio con IVA
-            String.format("%.2f", precioSinIVA), // Precio sin IVA
-            String.format("%.2f", montoIVA), // Monto de IVA
-            u.stock
-        });
+
+    private void pintarTabla() {
+        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+        modelo.setRowCount(0); // limpiar tabla
+        for (Libros u : SistemaVenta.libros) {
+            double precioSinIVA = u.precioIVA / 1.12;
+            double montoIVA = u.precioIVA - precioSinIVA;
+            modelo.addRow(new Object[]{
+                u.titulo,
+                u.autor,
+                u.genero,
+                String.format("%.2f", u.precioIVA),
+                String.format("%.2f", precioSinIVA),
+                String.format("%.2f", montoIVA),
+                u.stock
+            });
+        }
     }
-}
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -69,6 +73,9 @@ private void pintarTabla() {
         textField5 = new java.awt.TextField();
         jLabel2 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -151,23 +158,50 @@ private void pintarTabla() {
             }
         });
 
+        jButton5.setBackground(new java.awt.Color(237, 206, 225));
+        jButton5.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jButton5.setForeground(new java.awt.Color(207, 114, 161));
+        jButton5.setText("Exportar json");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jButton6.setBackground(new java.awt.Color(237, 206, 225));
+        jButton6.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jButton6.setForeground(new java.awt.Color(207, 114, 161));
+        jButton6.setText("Importar json");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        jButton7.setBackground(new java.awt.Color(237, 206, 225));
+        jButton7.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jButton7.setForeground(new java.awt.Color(207, 114, 161));
+        jButton7.setText("actualizar");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(44, 44, 44)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(41, 41, 41)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(22, 22, 22)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(44, 44, 44)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 311, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(50, 50, 50)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel4)
@@ -190,8 +224,22 @@ private void pintarTabla() {
                             .addComponent(textField1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(textField2, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4)
-                .addGap(33, 33, 33))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton5)
+                        .addGap(46, 46, 46))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton7))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(197, 197, 197)
+                                .addComponent(jButton6)))
+                        .addContainerGap())))
+            .addComponent(jScrollPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -202,109 +250,149 @@ private void pintarTabla() {
                     .addComponent(jButton1)
                     .addComponent(jButton2)
                     .addComponent(jButton3))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel2)
-                    .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(textField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2)
+                            .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jButton5)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton4)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(textField3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(19, 19, 19)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(textField4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel6)
-                    .addComponent(textField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(28, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(textField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton4)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(textField3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(19, 19, 19)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(textField4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel6)
+                            .addComponent(textField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton6)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton7)))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
         this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
-
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-  int borrar = jTable1.getSelectedRow();
-            if (JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar este libro?") == 0) {
-                SistemaVenta.libros.remove(borrar);
-                pintarTabla();
-                JOptionPane.showMessageDialog(this, "Libro eliminado");
-                 } else {
-        JOptionPane.showMessageDialog(this, "Seleccione un elemento a borrar");
-    
-            }        // TODO add your handling code here:
+        int borrar = jTable1.getSelectedRow();
+        if (JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar este libro?") == 0) {
+            SistemaVenta.libros.remove(borrar);
+            pintarTabla();
+            SistemaVenta.crearLibrosJSON("librosExportados.json");
+            JOptionPane.showMessageDialog(this, "Libro eliminado");
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione un elemento a borrar");
+        }        // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-    int modificar = jTable1.getSelectedRow();
-    if (modificar > -1) {
-        libro = SistemaVenta.libros.get(modificar);
-       textField1.setText(libro.titulo); // Accediendo directamente
-        textField2.setText(libro.autor); // Accediendo directamente
-        textField3.setText(libro.genero); // Accediendo directamente
-        textField4.setText(String.valueOf(libro.precioIVA)); // Accediendo directamente
-        textField5.setText(String.valueOf(libro.stock)); // Accediendo directamente
-       
-    } else {
-        JOptionPane.showMessageDialog(this, "Seleccione un elemento a modificar");
-    }          // TODO add your handling code here:
+        int modificar = jTable1.getSelectedRow();
+        if (modificar > -1) {
+            libro = SistemaVenta.libros.get(modificar);
+            textField1.setText(libro.titulo); // Accediendo directamente
+            textField2.setText(libro.autor); // Accediendo directamente
+            textField3.setText(libro.genero); // Accediendo directamente
+            textField4.setText(String.valueOf(libro.precioIVA)); // Accediendo directamente
+            textField5.setText(String.valueOf(libro.stock)); // Accediendo directamente
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione un elemento a modificar");
+        }          // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void textField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField1ActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_textField1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-   if (libro != null) {
-        // Accediendo a los campos de texto
-        libro.titulo = textField1.getText();
-        libro.autor = textField2.getText();
-        libro.genero = textField3.getText();
-        
-        // Convertir el precio a decimal
-        try {
-            double valor = Double.parseDouble(textField4.getText());
-            libro.precioIVA = valor; // Guardar el precio con IVA
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "El precio debe ser un número decimal válido.");
-            return; // Salir si hay un error de formato
+        if (libro != null) {
+            // Accediendo a los campos de texto
+            libro.titulo = textField1.getText();
+            libro.autor = textField2.getText();
+            libro.genero = textField3.getText();
+            // Convertir el precio a decimal
+            try {
+                double valor = Double.parseDouble(textField4.getText());
+                libro.precioIVA = valor; // Guardar el precio con IVA
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "El precio debe ser un número decimal válido.");
+                return; // Salir si hay un error de formato
+            }
+            // Convertir el stock a entero
+            try {
+                int stock = Integer.parseInt(textField5.getText());
+                libro.stock = stock;
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "El stock debe ser un número entero válido.");
+                return; // Salir si hay un error de formato
+            }
+            // Actualizar la tabla y mostrar un mensaje de éxito
+            pintarTabla();
+            JOptionPane.showMessageDialog(this, "Libro modificado exitosamente.");
+            SistemaVenta.crearLibrosJSON("librosExportados.json");
+        } else {
+            JOptionPane.showMessageDialog(this, "Ningún libro seleccionado.");
         }
-        
-        // Convertir el stock a entero
-        try {
-            int stock = Integer.parseInt(textField5.getText());
-            libro.stock = stock;
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "El stock debe ser un número entero válido.");
-            return; // Salir si hay un error de formato
-        }
-
-        // Actualizar la tabla y mostrar un mensaje de éxito
-        pintarTabla();
-        JOptionPane.showMessageDialog(this, "Libro modificado exitosamente.");
-    } else {
-        JOptionPane.showMessageDialog(this, "Ningún libro seleccionado.");
-    }
-
     }//GEN-LAST:event_jButton4ActionPerformed
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        String ruta = "librosExportados.json"; // Ruta fija 
+        SistemaVenta.crearLibrosJSON(ruta);
+        JOptionPane.showMessageDialog(null, "Libros exportados correctamente en: " + ruta);
+    }//GEN-LAST:event_jButton5ActionPerformed
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        ArrayList<Libros> librosImportados = SistemaVenta.cargarLibrosDesdeJSON("librosExportados.json");
+        System.out.println("Importando libros...");
+for (Libros libro : SistemaVenta.libros) {
+    System.out.println(libro.titulo + " - " + libro.autor);
+}
+pintarTabla();
+        if (librosImportados != null && !librosImportados.isEmpty()) {
+            SistemaVenta.libros = librosImportados;
+             pintarTabla();
+            JOptionPane.showMessageDialog(null, "Libros importados automáticamente desde librosExportados.json.");
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pudieron importar los libros o el archivo está vacío.");
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        ArrayList<Libros> librosImportados = SistemaVenta.cargarLibrosDesdeJSON("librosExportados.json");
+        if (librosImportados != null && !librosImportados.isEmpty()) {
+            SistemaVenta.libros.clear();
+            SistemaVenta.libros.addAll(librosImportados);
+            pintarTabla();
+            JOptionPane.showMessageDialog(this, "Tabla actualizada.");
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo actualizar. El archivo está vacío o no existe.");
+        }
+
+    }//GEN-LAST:event_jButton7ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

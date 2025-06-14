@@ -49,8 +49,7 @@ public class CargarCupones {
             System.out.println("Error al leer el archivo: " + e.getMessage());
         } catch (NumberFormatException e) {
             System.out.println("Error al convertir valor a número: " + e.getMessage());
-        } catch (Exception e) {
-            System.out.println("Error inesperado: " + e.getMessage());
+      
         }
     }
 }

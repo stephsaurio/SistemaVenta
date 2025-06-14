@@ -338,7 +338,7 @@ this.dispose();       }//GEN-LAST:event_jButton1ActionPerformed
         SistemaVenta.usuarios.addAll(usuariosImportados);
 
         JOptionPane.showMessageDialog(this, "Usuarios importados exitosamente.");
-        // Aquí puedes actualizar la vista de la tabla o lista de usuarios
+        
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton6ActionPerformed
 
@@ -348,7 +348,7 @@ this.dispose();       }//GEN-LAST:event_jButton1ActionPerformed
         SistemaVenta.usuarios.clear();
         SistemaVenta.usuarios.addAll(usuariosImportados);
         pintarTabla(); // Actualizar la tabla después de importar
-        JOptionPane.showMessageDialog(this, "Usuarios actualizados desde XML.");
+        JOptionPane.showMessageDialog(this, "Tabla actualizada.");
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton7ActionPerformed
 

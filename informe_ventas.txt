@@ -1,0 +1,1 @@
+Nombre Cliente,NIT,Dirección,Total,Total Sin IVA,Descuento,Vendedor,Fecha

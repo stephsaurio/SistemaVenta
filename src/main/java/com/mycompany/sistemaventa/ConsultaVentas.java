@@ -1,5 +1,6 @@
 package com.mycompany.sistemaventa;
 
+import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 
@@ -15,25 +16,28 @@ public class ConsultaVentas extends javax.swing.JFrame {
     }
 
     private void pintarTabla() {
-        DefaultTableModel modelo = new DefaultTableModel(
-                new String[]{"Cliente", "NIT", "Dirección", "Total", "Total sin IVA", "Vendedor", "Fecha"}, 0
-        );
+    DefaultTableModel modelo = new DefaultTableModel(
+            new String[]{"Cliente", "NIT", "Dirección", "Total", "Total sin IVA", "Descuento", "Vendedor", "Fecha"}, 0
+    );
 
-        for (Ventas v : SistemaVenta.ventas) {
-            modelo.addRow(new Object[]{
-                v.nombreCliente,
-                v.nit,
-                v.direccion,
-                v.total,
-                v.totalSinIVA,
-                v.vendedor,
-                v.fecha 
-            });
-        }
-
-        jTable1.setModel(modelo);
+    for (Ventas v : SistemaVenta.ventas) {
+        modelo.addRow(new Object[]{
+            v.nombreCliente,
+            v.nit,
+            v.direccion,
+            v.total,
+            v.totalSinIVA,
+            v.descuento,
+            v.vendedor,
+            v.fecha 
+        });
     }
 
+    jTable1.setModel(modelo);
+}
+public ArrayList<Ventas> obtenerVentas() {
+    return SistemaVenta.ventas; // Retorna la lista de ventas desde SistemaVenta
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -47,6 +51,7 @@ public class ConsultaVentas extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         Borrar = new javax.swing.JButton();
+        exportarCSV = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -76,7 +81,7 @@ public class ConsultaVentas extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 490, -1, -1));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 490, -1, -1));
 
         Borrar.setBackground(new java.awt.Color(237, 206, 225));
         Borrar.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
@@ -87,7 +92,18 @@ public class ConsultaVentas extends javax.swing.JFrame {
                 BorrarActionPerformed(evt);
             }
         });
-        getContentPane().add(Borrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 490, -1, -1));
+        getContentPane().add(Borrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 490, -1, -1));
+
+        exportarCSV.setBackground(new java.awt.Color(237, 206, 225));
+        exportarCSV.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        exportarCSV.setForeground(new java.awt.Color(207, 114, 161));
+        exportarCSV.setText("exportar csv");
+        exportarCSV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportarCSVActionPerformed(evt);
+            }
+        });
+        getContentPane().add(exportarCSV, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 490, -1, -1));
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 530));
 
         pack();
@@ -110,9 +126,19 @@ public class ConsultaVentas extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_BorrarActionPerformed
 
+    private void exportarCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportarCSVActionPerformed
+     String rutaArchivo = "/home/stephany/NetBeansProjects/SistemaVenta/informe_ventas.txt";
+    ArrayList<Ventas> ventas = obtenerVentas(); // Método para obtener las ventas
+    SistemaVenta.exportarVentasACSV(rutaArchivo, ventas);
+    
+    JOptionPane.showMessageDialog(this, "Ventas exportadas a CSV exitosamente.");
+
+    }//GEN-LAST:event_exportarCSVActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Borrar;
+    private javax.swing.JButton exportarCSV;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;

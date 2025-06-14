@@ -7,11 +7,12 @@ import java.util.Date;
 public class NuevaVenta extends javax.swing.JFrame {
 
     private ArrayList<Libros> libros;
-    private int cantidad;
+    private ArrayList<LibroVendido> librosVendidos = new ArrayList<>();
+    private double totalVenta = 0.0; 
 
     public NuevaVenta() {
         initComponents();
-
+        llenarComboCupones();
         cargarLibros(); // Cargar libros al inicio
     }
 
@@ -55,6 +56,8 @@ public class NuevaVenta extends javax.swing.JFrame {
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jComboBox2 = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -63,12 +66,12 @@ public class NuevaVenta extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(207, 114, 161));
         jLabel5.setText("Cantidad:");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 290, -1, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 330, -1, -1));
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(207, 114, 161));
         jLabel1.setText("Venta");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 150, 70, 40));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 150, 60, 20));
 
         Nit.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         Nit.setForeground(new java.awt.Color(207, 114, 161));
@@ -78,7 +81,7 @@ public class NuevaVenta extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(207, 114, 161));
         jLabel3.setText("Precio:");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 250, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 250, -1, -1));
 
         IngresarLibro.setBackground(new java.awt.Color(237, 206, 225));
         IngresarLibro.setFont(new java.awt.Font("SansSerif", 1, 15)); // NOI18N
@@ -101,7 +104,7 @@ public class NuevaVenta extends javax.swing.JFrame {
             }
         });
         getContentPane().add(Cerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 310, -1, -1));
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 330, 130, 20));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 370, 130, 20));
 
         NitTexField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -115,8 +118,8 @@ public class NuevaVenta extends javax.swing.JFrame {
                 jComboBox1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 210, 140, 30));
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 250, 130, 20));
+        getContentPane().add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 210, 140, 30));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 250, 130, 20));
 
         RealizarVenta.setBackground(new java.awt.Color(237, 206, 225));
         RealizarVenta.setFont(new java.awt.Font("SansSerif", 1, 15)); // NOI18N
@@ -132,14 +135,14 @@ public class NuevaVenta extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(207, 114, 161));
         jLabel9.setText("Libro:");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 210, -1, -1));
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 210, -1, -1));
 
         Cantidad1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Cantidad1ActionPerformed(evt);
             }
         });
-        getContentPane().add(Cantidad1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 290, 120, 20));
+        getContentPane().add(Cantidad1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 330, 120, 20));
 
         Direccion.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         Direccion.setForeground(new java.awt.Color(207, 114, 161));
@@ -168,14 +171,21 @@ public class NuevaVenta extends javax.swing.JFrame {
         jLabel12.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(207, 114, 161));
         jLabel12.setText("Subtotal:");
-        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 330, -1, -1));
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 370, -1, -1));
         getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 330, 130, 20));
 
         jLabel14.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(207, 114, 161));
         jLabel14.setText("Datos cliente");
         getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 10, 120, 40));
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 400));
+
+        jLabel10.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(207, 114, 161));
+        jLabel10.setText("cupon:");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 290, -1, -1));
+
+        getContentPane().add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 283, 170, 30));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 900, 440));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -207,7 +217,25 @@ public class NuevaVenta extends javax.swing.JFrame {
                 for (Libros libro : libros) {
                     if (libro.titulo.equals(tituloSeleccionado)) {
                         double subtotal = libro.precioIVA * cantidad;
-                        jLabel6.setText(String.format("%.2f", subtotal)); // Total con IVA
+                        jLabel6.setText(String.format("Subtotal: %.2f", subtotal)); // Mostrar subtotal
+
+                        // Calcular el descuento si hay un cupón
+                        String cuponSeleccionado = (String) jComboBox2.getSelectedItem();
+                        double descuento = 0;
+                        if (cuponSeleccionado != null && !cuponSeleccionado.equals("No aplica")) {
+                            for (Cupones cupon : SistemaVenta.cupones) {
+                                if (cupon.codigo.equals(cuponSeleccionado)) {
+                                    if ("Porcentaje".equals(cupon.tipoDescuento)) {
+                                        descuento = subtotal * (cupon.valor / 100);
+                                    } else if ("Monto fijo".equals(cupon.tipoDescuento)) {
+                                        descuento = cupon.valor;
+                                    }
+                                    break; 
+                                }
+                            }
+                        }
+                        // Mostrar el descuento en la interfaz
+                        jLabel8.setText(String.format("Descuento: %.2f", descuento)); // Mostrar descuento
                         break;
                     }
                 }
@@ -216,54 +244,68 @@ public class NuevaVenta extends javax.swing.JFrame {
             }
         } else {
             jLabel6.setText("");
+            jLabel8.setText(""); // Limpiar el descuento si no hay selección
         }
     }
 
-    private double totalVenta = 0.0; // Para acumular el total de la venta
+// Método para llenar el JComboBox con cupones
+    private void llenarComboCupones() {
+        jComboBox2.addItem("No aplica"); // Opción predeterminada
+        for (Cupones cupon : SistemaVenta.cupones) {
+            jComboBox2.addItem(cupon.codigo); // Agregar los cupones disponibles
+        }
+    }
+
+
     private void IngresarLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IngresarLibroActionPerformed
         String tituloSeleccionado = (String) jComboBox1.getSelectedItem();
-        int cantidad;
+        if (tituloSeleccionado == null || tituloSeleccionado.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, selecciona un libro.");
+            return;
+        }
 
-        // Validar cantidad
+        int cantidad;
         try {
             cantidad = Integer.parseInt(Cantidad1.getText());
             if (cantidad <= 0) {
-                throw new NumberFormatException("La cantidad debe ser mayor que cero.");
+                throw new NumberFormatException();
             }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Por favor, ingresa una cantidad válida.");
+            JOptionPane.showMessageDialog(this, "Cantidad inválida.");
             return;
         }
 
-        // Obtener datos del cliente
-        String nombreCliente = ClienteTextField.getText().trim();
-        String nit = NitTexField.getText().trim();
-        String direccion = DireccionTextField.getText().trim();
-
-        // Validar datos del cliente
-        if (nombreCliente.isEmpty() || nit.isEmpty() || direccion.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, completa todos los campos del cliente.");
-            return;
-        }
-
-        String vendedor = Login.usuarioActual.usuario;
-
-        // Buscar el libro correspondiente
         for (Libros libro : SistemaVenta.libros) {
             if (libro.titulo.equals(tituloSeleccionado)) {
-                double subtotal = cantidad * libro.precioIVA;
-                totalVenta += subtotal; // Acumular el total
-     // Restar del stock
-            libro.stock -= cantidad; // Actualizar el stock del libro
+                if (libro.stock < cantidad) {
+                    JOptionPane.showMessageDialog(this, "No hay suficiente stock.");
+                    return;
+                }
 
-                // Mostrar el subtotal en la interfaz
-                jLabel6.setText(String.format("%.2f", totalVenta));
+                // Verificar si ya se agregó el libro antes
+                boolean encontrado = false;
+                for (LibroVendido lv : librosVendidos) {
+                    if (lv.titulo.equals(libro.titulo)) {
+                        lv.cantidad += cantidad;
+                        encontrado = true;
+                        break;
+                    }
+                }
 
-                // No guardamos la venta aún, solo acumulamos
-                JOptionPane.showMessageDialog(this, "Libro agregado. Subtotal acumulado: " + totalVenta);
-                break; // Salir del bucle al encontrar el libro
+               
+                if (!encontrado) {
+                    librosVendidos.add(new LibroVendido(libro.titulo, libro.precioIVA, cantidad));
+                }
+
+                libro.reducirStock(cantidad);
+                totalVenta += libro.precioIVA * cantidad;
+                jLabel6.setText(String.format("Subtotal: %.2f", totalVenta));
+                JOptionPane.showMessageDialog(this, "Libro agregado a la venta.");
+                return;
             }
         }
+
+        JOptionPane.showMessageDialog(this, "Libro no encontrado.");
 
     }//GEN-LAST:event_IngresarLibroActionPerformed
 
@@ -281,60 +323,72 @@ public class NuevaVenta extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void RealizarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RealizarVentaActionPerformed
-    String nombreCliente = ClienteTextField.getText().trim();
-    String nit = NitTexField.getText().trim();
-    String direccion = DireccionTextField.getText().trim();
-
-    // Validar datos del cliente
-    if (nombreCliente.isEmpty() || nit.isEmpty() || direccion.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Por favor, completa todos los campos del cliente.");
-        return;
-    }
-
-    String vendedor = Login.usuarioActual.usuario;
-
-    // Obtener el título seleccionado
-    String tituloSeleccionado = (String) jComboBox1.getSelectedItem();
-    if (tituloSeleccionado == null) {
-        JOptionPane.showMessageDialog(this, "Por favor, selecciona un libro.");
-        return;
-    }
-
-    // Buscar el libro correspondiente
-    for (Libros libro : SistemaVenta.libros) {
-        if (libro.titulo.equals(tituloSeleccionado)) {
-            int cantidad = Integer.parseInt(Cantidad1.getText()); // Obtener cantidad
-            
-            // Verificar si hay suficiente stock
-            if (libro.stock < cantidad) {
-                JOptionPane.showMessageDialog(this, "No hay suficiente stock para realizar esta venta.");
-                return;
-            }
-
-            double subtotal = totalVenta; // Usar el total acumulado
-
-            // Guardar la venta
-            SistemaVenta.ventas.add(new Ventas(libro.titulo, cantidad, libro.precioIVA, subtotal, 
-                vendedor, nombreCliente, nit, direccion, new Date()));
-
-            JOptionPane.showMessageDialog(this, "Venta realizada con éxito. Total: " + subtotal);
-
-            // Limpiar campos
-            jComboBox1.setSelectedIndex(-1);
-            Cantidad1.setText("");
-            jLabel6.setText("");
-            totalVenta = 0.0; // Reiniciar el total
-            return; // Salir del método
+        if (librosVendidos.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay libros agregados a la venta.");
+            return;
         }
+
+        String nombreCliente = ClienteTextField.getText().trim();
+        String nit = NitTexField.getText().trim();
+        String direccion = DireccionTextField.getText().trim();
+
+        if (nombreCliente.isEmpty() || nit.isEmpty() || direccion.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, completa todos los campos del cliente.");
+            return;
+        }
+
+        String vendedor = Login.usuarioActual.usuario;
+        double totalSinIVA = totalVenta / 1.12;
+        double descuento = calcularDescuento(); // Método para calcular el descuento
+
+        // Registrar la venta
+        Ventas nuevaVenta = new Ventas(
+                totalVenta - descuento, 
+                totalSinIVA,
+                descuento,
+                vendedor,
+                nombreCliente,
+                nit,
+                direccion,
+                new Date(),
+                new ArrayList<>(librosVendidos)
+        );
+        SistemaVenta.ventas.add(nuevaVenta);
+
+        JOptionPane.showMessageDialog(this, "Venta realizada correctamente. Total: " + (totalVenta - descuento));
+
+        // Reiniciar campos
+        reiniciarCampos();
+
+
+    }//GEN-LAST:event_RealizarVentaActionPerformed
+    private double calcularDescuento() {
+        String cuponSeleccionado = (String) jComboBox2.getSelectedItem();
+        if (cuponSeleccionado != null && !cuponSeleccionado.equals("No aplica")) {
+            for (Cupones cupon : SistemaVenta.cupones) {
+                if (cupon.codigo.equals(cuponSeleccionado)) {
+                    if ("Porcentaje".equals(cupon.tipoDescuento)) {
+                        return totalVenta * (cupon.valor / 100);
+                    } else if ("Monto fijo".equals(cupon.tipoDescuento)) {
+                        return cupon.valor;
+                    }
+                }
+            }
+        }
+        return 0;
     }
 
-    JOptionPane.showMessageDialog(this, "El libro seleccionado no se pudo encontrar.");
-
- 
-
-        // TODO add your handling code here:
-    }//GEN-LAST:event_RealizarVentaActionPerformed
-
+    private void reiniciarCampos() {
+        totalVenta = 0;
+        librosVendidos.clear();
+        ClienteTextField.setText("");
+        NitTexField.setText("");
+        DireccionTextField.setText("");
+        Cantidad1.setText("");
+        jComboBox2.setSelectedIndex(0);
+        jComboBox1.setSelectedIndex(-1);
+        jLabel6.setText("Subtotal: 0.0");
+    }
     private void Cantidad1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Cantidad1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_Cantidad1ActionPerformed
@@ -360,7 +414,9 @@ public class NuevaVenta extends javax.swing.JFrame {
     private javax.swing.JLabel NombreCliente;
     private javax.swing.JButton RealizarVenta;
     private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;

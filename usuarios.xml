@@ -8,7 +8,7 @@
     </usuario>
     <usuario>
         <nombre>admin</nombre>
-        <nombreUsuario>admin123</nombreUsuario>
+        <nombreUsuario>admin1</nombreUsuario>
         <password>admin</password>
         <rol>1</rol>
     </usuario>
@@ -17,11 +17,5 @@
         <nombreUsuario>vendedor</nombreUsuario>
         <password>123</password>
         <rol>2</rol>
-    </usuario>
-<usuario>
-        <nombre>steph</nombre>
-        <nombreUsuario>sgomez</nombreUsuario>
-        <password>123</password>
-        <rol>1</rol>
     </usuario>
 </usuarios>

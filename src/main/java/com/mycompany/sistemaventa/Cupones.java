@@ -1,10 +1,10 @@
 package com.mycompany.sistemaventa;
 import java.time.LocalDate;
 
-public class Cupones {
+public class Cupones  {
     public String codigo;
     public double valor;
-    public String tipoDescuento; // "porcentaje" o "fijo"
+    public String tipoDescuento; 
   public LocalDate fechaVencimiento;
     // Constructor
     public Cupones(String codigo, double valor, String tipoDescuento, LocalDate fechaVencimiento) {

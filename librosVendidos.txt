@@ -1,0 +1,4 @@
+Nombre del Libro,Cantidad Vendida,Fecha,Precio de Venta
+El viaje de Chihiro,3,Fri Jun 13 20:45:30 CST 2025,300.00
+El principito,2,Fri Jun 13 20:45:30 CST 2025,200.00
+miku,5,Fri Jun 13 20:45:30 CST 2025,250.00

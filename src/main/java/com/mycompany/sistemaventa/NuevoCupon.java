@@ -148,92 +148,77 @@ public class NuevoCupon extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addContainerGap(94, Short.MAX_VALUE))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 private void guardarCuponEnArchivo(Cupones cupon) {
-    try (PrintWriter writer = new PrintWriter(new FileWriter("cupones.txt", true))) {
-        java.io.File archivo = new java.io.File("cupones.txt");
-        if (archivo.length() == 0) {
-            writer.println("codigo_descuento|descuento|tipo_descuento|fecha_vencimiento");
+        try (PrintWriter writer = new PrintWriter(new FileWriter("cupones.txt", true))) {
+            java.io.File archivo = new java.io.File("cupones.txt");
+            if (archivo.length() == 0) {
+                writer.println("codigo_descuento|descuento|tipo_descuento|fecha_vencimiento");
+            }
+            writer.println(cupon.codigo + "|" + cupon.valor + "|" + cupon.tipoDescuento + "|" + cupon.fechaVencimiento);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error al guardar cupón en archivo: " + e.getMessage());
         }
-        writer.println(cupon.codigo + "|" + cupon.valor + "|" + cupon.tipoDescuento + "|" + cupon.fechaVencimiento);
-    } catch (IOException e) {
-        JOptionPane.showMessageDialog(this, "Error al guardar cupón en archivo: " + e.getMessage());
     }
-}
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    String codigo = textField5.getText().trim();
-    double valor;
-    String fechaStr = textField8.getText().trim();
-    LocalDate fechaVencimiento;
-    String tipoDescuento = jComboBox1.getSelectedItem().toString();
+        String codigo = textField5.getText().trim();
+        double valor;
+        String fechaStr = textField8.getText().trim();
+        LocalDate fechaVencimiento;
+        String tipoDescuento = jComboBox1.getSelectedItem().toString();
 
-    // Validar el código
-    if (codigo.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "El código del cupón no puede estar vacío.");
-        return;
-    }
-
-    // Validar el valor del descuento
-    try {
-        valor = Double.parseDouble(textField6.getText().trim());
-        if (valor <= 0) {
-            JOptionPane.showMessageDialog(this, "El valor del descuento debe ser positivo.");
+        if (codigo.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El código del cupón no puede estar vacío.");
             return;
         }
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Ingrese un valor válido para el descuento.");
-        return;
-    }
 
-    // Validar la fecha de vencimiento
-    try {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        fechaVencimiento = LocalDate.parse(fechaStr, formatter);
-        if (fechaVencimiento.isBefore(LocalDate.now())) {
-            JOptionPane.showMessageDialog(this, "Cupon vencido.");
+        try {
+            valor = Double.parseDouble(textField6.getText().trim());
+            if (valor <= 0) {
+                JOptionPane.showMessageDialog(this, "El valor del descuento debe ser positivo.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Ingrese un valor válido para el descuento.");
             return;
         }
-    } catch (DateTimeParseException e) {
-        JOptionPane.showMessageDialog(this, "Formato de fecha inválido. Use 'dd/MM/yyyy'.");
-        return;
-    }
 
-    // Verificar si ya existe un cupón con el mismo código
-for (Cupones c : SistemaVenta.cupones) {
-    if (c.codigo.equals(codigo)) {
-        JOptionPane.showMessageDialog(this, "Ya existe un cupón con ese código.");
-        return;
-    }
-}
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            fechaVencimiento = LocalDate.parse(fechaStr, formatter);
+            if (fechaVencimiento.isBefore(LocalDate.now())) {
+                JOptionPane.showMessageDialog(this, "Cupon vencido.");
+                return;
+            }
+        } catch (DateTimeParseException e) {
+            JOptionPane.showMessageDialog(this, "Formato de fecha inválido. Use 'dd/MM/yyyy'.");
+            return;
+        }
 
-// Crear el nuevo cupón
-Cupones nuevoCupon = new Cupones(codigo, valor, tipoDescuento, fechaVencimiento);
-SistemaVenta.cupones.add(nuevoCupon);
-guardarCuponEnArchivo(nuevoCupon);
-try (PrintWriter writer = new PrintWriter(new FileWriter("cupones.txt", true))) {
-    java.io.File archivo = new java.io.File("cupones.txt");
-    if (archivo.length() == 0) {
-       
-    }
+        for (Cupones c : SistemaVenta.cupones) {
+            if (c.codigo.equals(codigo)) {
+                JOptionPane.showMessageDialog(this, "Ya existe un cupón con ese código.");
+                return;
+            }
+        }
 
-    writer.println(nuevoCupon.codigo + "|" + nuevoCupon.valor + "|" + nuevoCupon.tipoDescuento + "|" + nuevoCupon.fechaVencimiento);
-} catch (IOException e) {
-    JOptionPane.showMessageDialog(this, "Error al guardar el cupón en archivo: " + e.getMessage());
-}
+        Cupones nuevoCupon = new Cupones(codigo, valor, tipoDescuento, fechaVencimiento);
+        SistemaVenta.cupones.add(nuevoCupon);
+        guardarCuponEnArchivo(nuevoCupon);
 
-JOptionPane.showMessageDialog(this, "Cupón creado exitosamente.");   
+        JOptionPane.showMessageDialog(this, "Cupón creado exitosamente.");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-this.dispose();
+        this.dispose();
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
-  
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

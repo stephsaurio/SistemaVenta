@@ -3,7 +3,9 @@ package com.mycompany.sistemaventa;
 import javax.swing.JOptionPane;
 
 public class NuevoLibro extends javax.swing.JFrame {
-public Libros libroActual;
+
+    public Libros libroActual;
+
     public NuevoLibro() {
         initComponents();
     }
@@ -164,10 +166,19 @@ public Libros libroActual;
         String genero = textField3.getText().trim();
         String precioIVA = textField4.getText().trim();
         String stockStr = textField5.getText().trim();
-       if (titulo.isEmpty() || autor.isEmpty() || genero.isEmpty() || precioIVA.isEmpty() || stockStr.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
-        return;
-    }
+        
+        if (titulo.isEmpty() || autor.isEmpty() || genero.isEmpty() || precioIVA.isEmpty() || stockStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
+            return;
+        }
+
+        // Verificar si ya existe un libro con el mismo título y autor
+        for (Libros libro : SistemaVenta.libros) {
+            if (libro.titulo.equalsIgnoreCase(titulo) && libro.autor.equalsIgnoreCase(autor)) {
+                JOptionPane.showMessageDialog(this, "Este libro ya existe (mismo título y autor).");
+                return;
+            }
+        }
 
         // Convertir precio y stock a tipos adecuados
         double precio;
@@ -180,13 +191,12 @@ public Libros libroActual;
             return;
         }
 
-       Libros u = new Libros(titulo, autor, genero, precio, stock);
-    SistemaVenta.libros.add(u);
+        // Crear y agregar el nuevo libro
+        Libros u = new Libros(titulo, autor, genero, precio, stock);
+        SistemaVenta.libros.add(u);
 
-    JOptionPane.showMessageDialog(this, "Libro creado exitosamente.");
-         
-    this.dispose(); // Cerrar la ventana actual
-   
+        JOptionPane.showMessageDialog(this, "Libro creado exitosamente.");
+        this.dispose(); // Cerrar la ventana actual
 
     }//GEN-LAST:event_jButton1ActionPerformed
 

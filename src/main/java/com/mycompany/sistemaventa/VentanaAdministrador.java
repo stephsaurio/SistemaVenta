@@ -30,6 +30,7 @@ public class VentanaAdministrador extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         jMenu7 = new javax.swing.JMenu();
         jMenu8 = new javax.swing.JMenu();
+        jMenu9 = new javax.swing.JMenu();
 
         jMenu3.setText("File");
         jMenuBar2.add(jMenu3);
@@ -146,6 +147,18 @@ public class VentanaAdministrador extends javax.swing.JFrame {
         });
         jMenuBar1.add(jMenu8);
 
+        jMenu9.setText("Informe Libros");
+        jMenu9.addMenuListener(new javax.swing.event.MenuListener() {
+            public void menuCanceled(javax.swing.event.MenuEvent evt) {
+            }
+            public void menuDeselected(javax.swing.event.MenuEvent evt) {
+            }
+            public void menuSelected(javax.swing.event.MenuEvent evt) {
+                jMenu9MenuSelected(evt);
+            }
+        });
+        jMenuBar1.add(jMenu9);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -245,6 +258,11 @@ ConsultaVentas cv = new ConsultaVentas();
       cv.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_jMenu8MenuSelected
 
+    private void jMenu9MenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_jMenu9MenuSelected
+       ConsultaInformeLibros cil = new ConsultaInformeLibros();
+       cil.setVisible(true);
+    }//GEN-LAST:event_jMenu9MenuSelected
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Cerrar;
     private javax.swing.JButton Cerrar1;
@@ -260,6 +278,7 @@ ConsultaVentas cv = new ConsultaVentas();
     private javax.swing.JMenu jMenu6;
     private javax.swing.JMenu jMenu7;
     private javax.swing.JMenu jMenu8;
+    private javax.swing.JMenu jMenu9;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuBar jMenuBar3;

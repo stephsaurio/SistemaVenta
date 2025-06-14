@@ -1,0 +1,23 @@
+[
+  {
+    "titulo": "El viaje de Chihiro",
+    "autor": "Hayao Miyazaki",
+    "genero": "Ficción",
+    "precioIVA": 100.0,
+    "stock": 10
+  },
+  {
+    "titulo": "El principito",
+    "autor": "Antoine de Saint-Exupéry",
+    "genero": "Ficción",
+    "precioIVA": 100.0,
+    "stock": 10
+  },
+  {
+    "titulo": "miku",
+    "autor": "miku",
+    "genero": "miku",
+    "precioIVA": 50.0,
+    "stock": 20
+  }
+]
